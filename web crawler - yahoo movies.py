@@ -11,7 +11,7 @@ for tag in soup.find_all('a'):
     if 'data-ga' in tag.attrs:
         if '電影介紹_類型icon' in tag['data-ga']:
             str = tag['data-ga'].strip('[]').split(',')
-            genre.append(str[2].strip('\''))
+            genre.append(str[2].strip("''"))
 
 crews = soup.find_all('div', {'class': 'movie_intro_list'})
 director = crews[0].text.strip()

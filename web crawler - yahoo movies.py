@@ -23,7 +23,7 @@ for tag in soup.find_all('span'):
         if '上映日期' in tag:
             date = tag[1]
         elif '片　　長' in tag:
-            time = tag[1]
+            time = tag[1].strip('0')
         elif '發行公司' in tag:
             com = tag[1]
         elif 'IMDb分數' in tag:

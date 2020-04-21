@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-req = requests.get('https://movies.yahoo.com.tw/movieinfo_main/%E7%8A%AC%E9%B3%B4%E6%9D%91-howling-village-10543')
+req = requests.get('https://movies.yahoo.com.tw/movieinfo_main/%E6%94%BF%E5%AE%A2%E8%AA%A0%E5%AF%A6%E4%B8%AD-honest-candidate-10563')
 html = req.content.decode('utf8')
 soup = BeautifulSoup(html, 'lxml')
 
@@ -10,8 +10,8 @@ genre = []
 for tag in soup.find_all('a'):
     if 'data-ga' in tag.attrs:
         if '電影介紹_類型icon' in tag['data-ga']:
-            str = tag['data-ga'].strip('[]').split(',')
-            genre.append(str[2].strip("''"))
+            intro = tag['data-ga'].strip('[]').split(',')
+            genre.append(intro[2].strip("''"))
 
 crews = soup.find_all('div', {'class': 'movie_intro_list'})
 director = crews[0].text.strip()

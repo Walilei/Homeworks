@@ -7,7 +7,7 @@ url = 'https://www.ptt.cc/bbs/movie/M.1587832086.A.174.html'
 req = requests.get(url, headers=headers)
 soup = BeautifulSoup(req.text, 'html.parser')
 
-content = soup.find('div', {'id': 'main-content'}).text.split('※')[0]
+content = soup.find('div', {'id': 'main-content'}).text.split('※ 發信站')[0]
 info = []
 for i in soup.find_all('span', {'class': 'article-meta-value'}):
     info.append(i.text)

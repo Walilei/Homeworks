@@ -18,13 +18,13 @@ time = info[3]
 
 like = 0
 dislike = 0
-score = like - dislike
 for i in soup.find_all('div', {'class':'push'}):
     if i.text[0] == '推':
         like += 1
     elif i.text[0] == '噓':
         dislike += 1
-
+score = like - dislike
+        
 print(content.strip('\n').strip('--'))
 print('--我是分隔線--')
 print(f"推： {like}")

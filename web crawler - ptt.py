@@ -3,8 +3,9 @@ from bs4 import BeautifulSoup
 
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36'}
-url = 'https://www.ptt.cc/bbs/movie/M.1587832086.A.174.html'
-req = requests.get(url, headers=headers)
+cookies = {'over18':'1'}
+url = 'https://www.ptt.cc/bbs/Gossiping/M.1587950959.A.0F8.html'
+req = requests.get(url, headers=headers, cookies=cookies)
 soup = BeautifulSoup(req.text, 'html.parser')
 
 content = soup.find('div', {'id': 'main-content'}).text.split('※ 發信站')[0]

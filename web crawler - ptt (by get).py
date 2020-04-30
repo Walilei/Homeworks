@@ -13,7 +13,8 @@ info = []
 for i in soup.find_all('span', {'class': 'article-meta-value'}):
     info.append(i.text)
 author = info[0]
-title = info[2]
+# 修改標題去除特定字元，之後用作檔名
+title = info[2].replace(':', '_')
 time = info[3]
 
 like = 0
@@ -25,11 +26,14 @@ for i in soup.find_all('div', {'class': 'push'}):
         dislike += 1
 score = like - dislike
 
-print(content.strip('\n').strip('--'))
-print('--我是分隔線--')
-print(f"推： {like}")
-print(f"噓： {dislike}")
-print(f"分數： {score}")
-print(f"作者： {author}")
-print(f"標題： {title}")
-print(f"時間： {time}")
+# 存成文字檔
+with open(f'./ptt_movie/{title}.txt', 'w', encoding='utf-8') as file:
+    file.write(content)
+    file.write('--我是分隔線--')
+    file.write(f"推： {like}")
+    file.write(f"噓： {dislike}")
+    file.write(f"分數： {score}")
+    file.write(f"作者： {author}")
+    file.write(f"標題： {title}")
+    file.write(f"時間： {time}")
+    

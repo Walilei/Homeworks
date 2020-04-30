@@ -18,4 +18,6 @@ while page > 8930:
         article_soup = BeautifulSoup(res.text, 'html.parser')
         ptt_to_txt(article_soup)
     page -= 1
-   
+    url = f'https://www.ptt.cc/bbs/movie/index{page}.html'
+    req = requests.get(url, headers=headers, cookies=cookies)
+    soup = BeautifulSoup(req.text, 'html.parser')

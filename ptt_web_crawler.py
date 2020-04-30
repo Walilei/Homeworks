@@ -6,7 +6,7 @@ def ptt_to_txt(article):
         info.append(i.text)
     author = info[0]
     # 修改標題去除特定字元，之後用作檔名
-    title = info[2].replace(':', '_')
+    title = info[2].replace(':', '_').replace('/', '-')
     time = info[3]
 
     like = 0

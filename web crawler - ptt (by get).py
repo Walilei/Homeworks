@@ -8,7 +8,7 @@ url = 'https://www.ptt.cc/bbs/Gossiping/M.1587950959.A.0F8.html'
 req = requests.get(url, headers=headers, cookies=cookies)
 soup = BeautifulSoup(req.text, 'html.parser')
 
-content = soup.find('div', {'id': 'main-content'}).text.split('※ 發信站')[0]
+content = soup.find('div', {'id': 'main-content'}).text.split('--\n※ 發信站')[0]
 info = []
 for i in soup.find_all('span', {'class': 'article-meta-value'}):
     info.append(i.text)

@@ -6,7 +6,7 @@ headers = {'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                          "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36"}
 url = 'https://buzzorange.com/techorange/wp-admin/admin-ajax.php'
 
-# 列印第1~6的頁面
+# 列印第1~6的頁面文章標題
 for page in range(1, 6):
     post_data_str = f'''action: fm_ajax_load_more
     nonce: 025c2d58ba

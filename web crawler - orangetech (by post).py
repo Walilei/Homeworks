@@ -9,6 +9,7 @@ url = 'https://buzzorange.com/techorange/wp-admin/admin-ajax.php'
 # 列印第1~6的頁面文章標題
 for page in range(1, 6):
     post_data_str = f'''action: fm_ajax_load_more
+    # nonce需要更新
     nonce: 025c2d58ba
     page: {page}'''
     post_data = {r.split(': ')[0]: r.split(': ')[1] for r in post_data_str.split('\n')}

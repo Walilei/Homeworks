@@ -4,11 +4,12 @@ from bs4 import BeautifulSoup
 
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36'}
+# 找當天更新的資料
 today = f'{date.today().month}/{date.today().day:02}'
 page = 1
 
-
-while page < 3:
+while page < 10:
+    # 只取台北地區、大學學歷以上資料
     url = f'https://www.104.com.tw/jobs/search/?ro=0&isnew=7&area=6001001000&edu=4&order=11&asc=0&' \
           f'page={page}&mode=s&jobsource=2018indexpoc'
     req = requests.get(url, headers=headers)

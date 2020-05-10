@@ -47,13 +47,13 @@ def store_job(job_url):
 
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36'}
-# today = f'{date.today().month}/{date.today().day:02}'
-# yesterday = date.today() + td(-1)
-# yesterday = f'{yesterday.month}/{yesterday.day:02}'
-today = '5/10'
-yesterday = '5/09'
+today = f'{date.today().month}/{date.today().day:02}'
+yesterday = date.today() + td(-1)
+yesterday = f'{yesterday.month}/{yesterday.day:02}'
+# today = '5/10'
+# yesterday = '5/09'
 job_date = ''
-page = 62
+page = 1
 
 while job_date != yesterday:
     # 只取台北地區、大學學歷以上資料

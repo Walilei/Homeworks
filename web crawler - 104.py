@@ -18,7 +18,7 @@ def store_job(job_url):
     json_file = job_soup.find('p').string
     json_file = json.loads(json_file)
 
-    jobName = json_file['data']['header']['jobName']
+    jobName = json_file['data']['header']['jobName'].replace('"', '_')
     comName = json_file['data']['header']['custName']
     appearDate = json_file['data']['header']['appearDate']
     salary = json_file['data']['jobDetail']['salary']
@@ -37,7 +37,7 @@ def store_job(job_url):
     db = pymysql.connect(host='127.0.0.1', user='root', passwd='70794', db='py_crawler')
     cursor = db.cursor()
     sql = f'''insert into job(jobName, comName, appearDate, salary, salaryMin, salaryMax, industry) \
-    values('{jobName}', '{comName}', '{appearDate}', '{salary}', {salaryMin}, {salaryMax}, '{industry}');
+    values("{jobName}", "{comName}", "{appearDate}", "{salary}", {salaryMin}, {salaryMax}, "{industry}");
     '''
     cursor.execute(sql)
     db.commit()
@@ -47,11 +47,13 @@ def store_job(job_url):
 
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36'}
-today = f'{date.today().month}/{date.today().day:02}'
-yesterday = date.today() + td(-1)
-yesterday = f'{yesterday.month}/{yesterday.day:02}'
+# today = f'{date.today().month}/{date.today().day:02}'
+# yesterday = date.today() + td(-1)
+# yesterday = f'{yesterday.month}/{yesterday.day:02}'
+today = '5/10'
+yesterday = '5/09'
 job_date = ''
-page = 1
+page = 62
 
 while job_date != yesterday:
     # 只取台北地區、大學學歷以上資料
@@ -66,7 +68,10 @@ while job_date != yesterday:
         if job_date == today:
             # job_title = _.find('a', {'class': 'js-job-link'}).text
             if '//tutor.104.com.tw/' in _.find('a', {'class': 'js-job-link'})['href']: continue
-            new_url = 'https:' + _.find('a', {'class': 'js-job-link'})['href']
-            store_job(new_url)
+            try:
+                new_url = 'https:' + _.find('a', {'class': 'js-job-link'})['href']
+                store_job(new_url)
+            except json.decoder.JSONDecodeError:
+                continue
     page += 1
     print(page)

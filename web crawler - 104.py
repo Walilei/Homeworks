@@ -46,6 +46,7 @@ def store_job(job_url):
     cursor.execute(sql)
     db.commit()
     db.close()
+    print('file saved!')
 
 
 while page < 10:

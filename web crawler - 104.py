@@ -36,8 +36,9 @@ def store_job(job_url):
     # 將職務條件存入MySQL資料庫
     db = pymysql.connect(host='127.0.0.1', user='root', passwd='70794', db='py_crawler')
     cursor = db.cursor()
-    sql = f'''insert into job(jobName, comName, appearDate, salary, salaryMin, salaryMax, industry) \
-    values("{jobName}", "{comName}", "{appearDate}", "{salary}", {salaryMin}, {salaryMax}, "{industry}");
+    sql = f'''insert into job(id, jobName, comName, appearDate, salary, salaryMin, salaryMax, industry) \
+    values("{job_idx}", "{jobName}", "{comName}", "{appearDate}", "{salary}", {salaryMin}, {salaryMax}, "{industry}")\
+    ON DUPLICATE KEY UPDATE appearDate = "{appearDate}";
     '''
     cursor.execute(sql)
     db.commit()
@@ -57,7 +58,7 @@ page = 1
 
 while job_date != yesterday:
     # 只取台北地區、大學學歷以上資料
-    url = f'https://www.104.com.tw/jobs/search/?ro=0&isnew=7&area=6001001000&edu=4&order=11&asc=0&' \
+    url = 'https://www.104.com.tw/jobs/search/?ro=0&isnew=7&area=6001001000&edu=4&order=11&asc=0&' \
           f'page={page}&mode=s&jobsource=2018indexpoc'
     req = requests.get(url, headers=headers)
     soup = BeautifulSoup(req.text, 'html.parser')

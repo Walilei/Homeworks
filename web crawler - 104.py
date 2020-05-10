@@ -15,7 +15,7 @@ def store_job(job_url):
                    'Referer': job_url}
     job_req = requests.get(job_json, headers=job_headers)
     job_soup = BeautifulSoup(job_req.text, 'lxml')
-    json_file = job_soup.find('p').string
+    json_file = job_soup.find('p').
     json_file = json.loads(json_file)
 
     jobName = json_file['data']['header']['jobName'].replace('"', '_')

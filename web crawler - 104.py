@@ -34,7 +34,7 @@ def store_job(job_url):
     #     json.dump(json_file, f)
 
     # 將職務條件存入MySQL資料庫
-    db = pymysql.connect(host='127.0.0.1', user='root', passwd='70794', db='py_crawler')
+    db = pymysql.connect(host='127.0.0.1', user='root', passwd='*****', db='py_crawler')
     cursor = db.cursor()
     sql = f'''insert into job(id, jobName, comName, appearDate, salary, salaryMin, salaryMax, industry) \
     values("{job_idx}", "{jobName}", "{comName}", "{appearDate}", "{salary}", {salaryMin}, {salaryMax}, "{industry}")\
@@ -57,9 +57,9 @@ job_date = ''
 page = 1
 
 while job_date != yesterday:
-    # 只取台北地區、大學學歷以上資料
-    url = 'https://www.104.com.tw/jobs/search/?ro=0&isnew=7&area=6001001000&edu=4&order=11&asc=0&' \
-          f'page={page}&mode=s&jobsource=2018indexpoc'
+    # 只取台北地區、大學學歷以上、排除助理的資料
+    url = 'https://www.104.com.tw/jobs/search/?ro=0&area=6001001000&edu=4&order=11&asc=0&' \
+          f'excludeJobKeyword=%E5%8A%A9%E7%90%86&s9=1&page={page}&mode=s&jobsource=2018indexpoc'
     req = requests.get(url, headers=headers)
     soup = BeautifulSoup(req.text, 'html.parser')
 
@@ -75,4 +75,6 @@ while job_date != yesterday:
             except json.decoder.JSONDecodeError:
                 continue
     page += 1
+    if page == 151:  # 因為104只提供前150頁資料
+        break
     print(f'Page {page}')

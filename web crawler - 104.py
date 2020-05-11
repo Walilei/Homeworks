@@ -15,7 +15,7 @@ def store_job(job_url):
                    'Referer': job_url}
     job_req = requests.get(job_json, headers=job_headers)
     job_soup = BeautifulSoup(job_req.text, 'lxml')
-    json_file = job_soup.find('p').
+    json_file = job_soup.find('p').text
     json_file = json.loads(json_file)
 
     jobName = json_file['data']['header']['jobName'].replace('"', '_')
@@ -43,7 +43,7 @@ def store_job(job_url):
     cursor.execute(sql)
     db.commit()
     db.close()
-    print('file saved!')
+    print(f'{jobName} saved!')
 
 
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
@@ -51,8 +51,8 @@ headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
 today = f'{date.today().month}/{date.today().day:02}'
 yesterday = date.today() + td(-1)
 yesterday = f'{yesterday.month}/{yesterday.day:02}'
-# today = '5/10'
-# yesterday = '5/09'
+# today = '5/11'
+# yesterday = '5/10'
 job_date = ''
 page = 1
 
@@ -75,4 +75,4 @@ while job_date != yesterday:
             except json.decoder.JSONDecodeError:
                 continue
     page += 1
-    print(page)
+    print(f'Page {page}')

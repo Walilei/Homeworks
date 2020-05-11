@@ -1,12 +1,10 @@
 import requests
-from datetime import date
-from datetime import timedelta as td
 from bs4 import BeautifulSoup
 import json
 import pymysql
 
 
-# 利用函式儲存搜尋到的職務
+# 建立函式儲存搜尋到的職務
 def store_job(job_url):
     job_idx = job_url[27:32]
     job_json = f'https://www.104.com.tw/job/ajax/content/{job_idx}'
@@ -33,7 +31,7 @@ def store_job(job_url):
     # with open(jobName, 'w') as f:
     #     json.dump(json_file, f)
 
-    # 將職務條件存入MySQL資料庫
+    # 將職務條件存入已建立的MySQL資料庫
     db = pymysql.connect(host='127.0.0.1', user='root', passwd='*****', db='py_crawler')
     cursor = db.cursor()
     sql = f'''insert into job(id, jobName, comName, appearDate, salary, salaryMin, salaryMax, industry) \
@@ -48,33 +46,20 @@ def store_job(job_url):
 
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36'}
-today = f'{date.today().month}/{date.today().day:02}'
-yesterday = date.today() + td(-1)
-yesterday = f'{yesterday.month}/{yesterday.day:02}'
-# today = '5/11'
-# yesterday = '5/10'
-job_date = ''
-page = 1
-
-while job_date != yesterday:
-    # 只取台北地區、大學學歷以上、排除助理的資料
-    url = 'https://www.104.com.tw/jobs/search/?ro=0&area=6001001000&edu=4&order=11&asc=0&' \
-          f'excludeJobKeyword=%E5%8A%A9%E7%90%86&s9=1&page={page}&mode=s&jobsource=2018indexpoc'
+# 104僅提供150頁的資料
+for page in range(1, 151):
+    # 只取台北地區、大學學歷、需要軟體技術相關資料
+    url = 'https://www.104.com.tw/jobs/search/?ro=0&jobcat=2007001000%2C2004001010%2C2003002002&area=6001001000&' \
+          f'edu=4&order=12&asc=0&excludeJobKeyword=%E5%AF%A6%E7%BF%92&page={page}&mode=s&jobsource=2018indexpoc'
     req = requests.get(url, headers=headers)
     soup = BeautifulSoup(req.text, 'html.parser')
-
     for _ in soup.find_all('div', {'class': 'b-block__left'}):
-        # 只找當天更新的資料
         job_date = _.find('span', {'class': 'b-tit__date'}).text.replace('\n', '').strip()
-        if job_date == today:
-            # job_title = _.find('a', {'class': 'js-job-link'}).text
-            if '//tutor.104.com.tw/' in _.find('a', {'class': 'js-job-link'})['href']: continue
+        if len(job_date) > 0 and ('//tutor.104.com.tw/' not in _.find('a', {'class': 'js-job-link'})['href']):
+            new_url = 'https:' + _.find('a', {'class': 'js-job-link'})['href']
             try:
                 new_url = 'https:' + _.find('a', {'class': 'js-job-link'})['href']
                 store_job(new_url)
             except json.decoder.JSONDecodeError:
                 continue
-    page += 1
-    if page == 151:  # 因為104只提供前150頁資料
-        break
     print(f'Page {page}')

@@ -44,6 +44,13 @@ def store_job(job_url):
     print(f'{jobName} saved!')
 
 
+'''
+建立MySQL資料庫指令
+create database py_crawler;
+use py_crawler;
+create table job (id varchar(5) primary key, jobName varchar(255), comName varchar(255), 
+appearDate date, salary varchar(255), salaryMin int, salaryMax int, industry varchar(100));
+'''
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36'}
 # 104僅提供150頁的資料

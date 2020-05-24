@@ -1,5 +1,6 @@
 ```{r}
 # 課程作業(cdc.Rdata)
+load("./riii/Statistics/cdc.Rdata")
 cdc$exerany = as.factor(cdc$exerany)
 cdc$hlthplan = as.factor(cdc$hlthplan)
 cdc$smoke100 = as.factor(cdc$smoke100)

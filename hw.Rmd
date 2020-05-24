@@ -17,7 +17,10 @@ cdc$smoke100 = as.factor(cdc$smoke100)
 summary(cdc$genhlth)
 
 # 2.男女生中有抽菸的比例?
-
+cdc %>%
+  group_by(gender) %>%
+  summarise(smoke = sum(smoke100=='1')/sum(cdc$smoke100))
+  
 # 3. 繪製年紀的直方圖
 library('ggplot2')
 h = ggplot(cdc, aes(x=age))

@@ -9,10 +9,16 @@ BMI[BMI<18.5|BMI>=24]
 ```
 
 ```{r}
-kevin = c(85, 73)
-marry = c(72, 64)
-jerry = c(59, 66)
-mat = matrix(c(kevin, marry, jerry), nrow = 3, byrow = T)
-mat
+# 課程作業(cdc.Rdata)
+# 1.資料中各健康狀況的分佈比例?
+summary(cdc$genhlth)
+
+# 2.男女生中有抽菸的比例?
+
+# 3. 繪製年紀的直方圖
+library('ggplot2')
+h = ggplot(cdc, aes(x=age))
+h + geom_bar()
+
 ```
 

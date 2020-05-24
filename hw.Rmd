@@ -10,6 +10,9 @@ BMI[BMI<18.5|BMI>=24]
 
 ```{r}
 # 課程作業(cdc.Rdata)
+cdc$exerany = as.factor(cdc$exerany)
+cdc$hlthplan = as.factor(cdc$hlthplan)
+cdc$smoke100 = as.factor(cdc$smoke100)
 # 1.資料中各健康狀況的分佈比例?
 summary(cdc$genhlth)
 

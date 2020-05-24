@@ -8,3 +8,11 @@ names(BMI) = stu
 BMI[BMI<18.5|BMI>=24]
 ```
 
+```{r}
+kevin = c(85, 73)
+marry = c(72, 64)
+jerry = c(59, 66)
+mat = matrix(c(kevin, marry, jerry), nrow = 3, byrow = T)
+mat
+```
+

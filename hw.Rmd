@@ -38,5 +38,8 @@ h + geom_boxplot()
 
 ```{r}
 # 5.身高、年紀、體重的相關係數
-
+options(digits=2)
+cor.test(cdc$height, cdc$weight)
+cor.test(cdc$height, cdc$age)
+cor.test(cdc$weight, cdc$age)
 ```

@@ -1,25 +1,21 @@
 ```{r}
 # 課程作業(cdc.Rdata)
 load("./riii/Statistics/cdc.Rdata")
+library('dplyr')
 cdc$exerany = as.factor(cdc$exerany)
 cdc$hlthplan = as.factor(cdc$hlthplan)
 cdc$smoke100 = as.factor(cdc$smoke100)
 ```
 
-
 ```{r}
 # 1.資料中各健康狀況的分佈比例?
-summary(cdc$genhlth)
+summary(cdc$genhlth)/nrow(cdc)
 ```
-
 
 ```{r}
 # 2.男女生中有抽菸的比例?
-cdc %>%
-  group_by(gender) %>%
-  summarise(smoke = sum(smoke100=='1')/sum(cdc$smoke100))
+table(cdc$gender, cdc$smoke100)/nrow(cdc)
 ```
-
 
 ```{r}
 # 3.繪製年紀的直方圖
@@ -28,7 +24,6 @@ h = ggplot(cdc, aes(x=age))
 h + geom_bar()
 ```
 
-
 ```{r}
 # 4.繪製不同健康狀況族群的BMI指數盒鬚圖
 cdc = data.frame(cdc, bmi=cdc$weight/cdc$height^2*703)
@@ -36,11 +31,10 @@ h = ggplot(cdc, aes(x=genhlth, y=bmi))
 h + geom_boxplot()
 ```
 
-
 ```{r}
 # 5.身高、年紀、體重的相關係數
-options(digits=2)
-cor.test(cdc$height, cdc$weight)
-cor.test(cdc$height, cdc$age)
-cor.test(cdc$weight, cdc$age)
+# install.packages('DataExplorer')
+library('DataExplorer')
+cor = data.frame(cdc$height, cdc$weight, cdc$age)
+plot_correlation(cor)
 ```

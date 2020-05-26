@@ -9,7 +9,8 @@ cdc$smoke100 = as.factor(cdc$smoke100)
 
 ```{r}
 # 1.資料中各健康狀況的分佈比例?
-summary(cdc$genhlth)/nrow(cdc)
+library(scales)
+label_percent()(summary(cdc$genhlth)/nrow(cdc))
 ```
 
 ```{r}

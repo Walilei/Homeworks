@@ -1,0 +1,35 @@
+```{r}
+# 1. 讀取lvr_prices_big5.csv檔案
+price = read.csv('d:/homework/riii/hw/lvr_prices_big5.csv')
+```
+
+```{r}
+# 2. 可使用哪個函式觀看檔案的資料結構
+str(price)
+```
+
+```{r}
+# 3. 請篩選出
+# (1) city_land_type為住宅用
+# (2) total_price > 0
+# (3) building_sqmeter > 0
+# (4) finish_ymd 非空值
+# 的房屋資料,並存入house變數中
+# ctrl + shift + c 多行註解
+house = price[price$city_land_type=='住' & price$total_price>0 & price$building_sqmeter>0 & nchar(price$finish_ymd)>0, ]
+```
+
+```{r}
+# 4. 使用house資料，利用房屋價格(total_price)及房屋平方米數(building_sqmeter)兩欄位，
+#    產生一新欄位為每平方米價格(price_per_sqmeter)，並將其四捨五入到整數位
+price_per_sqmeter = round(house$total_price / house$building_sqmeter, 0)
+house = cbind(house, price_per_sqmeter)
+```
+
+```{r}
+# 5. 使用house資料，利用scale() 將每平方米價格(price_per_sqmeter)欄位資料標準化
+#    ，並剔除掉outlier資料(z-score > 3)
+# scale(house$price_per_sqmeter)
+house = house[abs(scale(house$price_per_sqmeter)) <= 3,]
+```
+

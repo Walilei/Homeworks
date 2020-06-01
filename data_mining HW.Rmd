@@ -6,6 +6,7 @@ price = read.csv('d:/homework/riii/hw/lvr_prices_big5.csv')
 ```{r}
 # 2. 可使用哪個函式觀看檔案的資料結構
 str(price)
+price = price[, -23] # 刪除後面才要建立的price_per_sqmeter
 ```
 
 ```{r}
@@ -31,5 +32,15 @@ house = cbind(house, price_per_sqmeter)
 #    ，並剔除掉outlier資料(z-score > 3)
 # scale(house$price_per_sqmeter)
 house = house[abs(scale(house$price_per_sqmeter)) <= 3,]
+```
+
+```{r}
+# 6. 利用房屋完工日期(finish_ymd)產生一新變數為屋齡(building_age)加入house資料中
+# Hint(1) 取得當前日期的函數為 Sys.Date()
+# Hint(2) 一年請以365天計算，四捨五入至整數位
+# Hint(3) 將運算完的資料轉為整數型態(integer)
+house$finish_ymd = as.Date(house$finish_ymd)
+building_age = as.integer(round((Sys.Date() - house$finish_ymd)/365, 0))
+house = cbind(house, building_age)
 ```
 

@@ -100,3 +100,8 @@ library('e1071')
 predictions = predict(house.rp,testset,type='raw')
 
 ```
+
+```{r}
+# 13. 請繪製出此模型的ROC曲線，並計算其AUC
+
+```

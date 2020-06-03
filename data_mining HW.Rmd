@@ -108,5 +108,11 @@ confusionMatrix(table(predictions, testset$danger))
 
 ```{r}
 # 13. 請繪製出此模型的ROC曲線，並計算其AUC
-
+library(ROCR)
+pred = predict(house.rp, testset, type = 'prob')
+p_yes = pred[, 'YES']
+predictions = prediction(p_yes, testset$danger)
+auc = performance(predictions, measure = 'auc')
+roc_curve = performance(predictions, measure = 'tpr', x.measure = 'fpr')
+plot(roc_curve, main=paste('AUC:',(auc@y.values)))
 ```

@@ -51,9 +51,9 @@ dangerhouse = read.csv('./riii/hw/house_danger.csv')
 house = merge(x = house, y = dangerhouse, by.x = 'Unnamed..0',by.y='ID', all.x = T)
 
 # 檢查遺失值
-sum(is.na(house
+# sum(is.na(house
 # 移除遺失值
-house = house[complete.cases(house),]
+# house = house[complete.cases(house),]
 ```
 
 ```{r}
@@ -85,6 +85,18 @@ house.rp = rpart(danger~.,data=trainset,control = con)
 par(mfrow=c(1,1))
 plot(house.rp)
 text(house.rp)
+```
 
+```{r}
+# 11. 請問此決策數是否需要進行剪枝(prune)？如需剪枝請將修剪後的模型存回house.rp中
 summary(house.rp)$cptable
+```
+
+```{r}
+# 12. 將測試集資料(testset)放入模型中進行驗證，
+#     請問此模型的accuracy, precision, recall等績效分別為何?
+library('caret')
+library('e1071')
+predictions = predict(house.rp,testset,type='raw')
+
 ```

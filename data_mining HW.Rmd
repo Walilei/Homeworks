@@ -47,7 +47,7 @@ house$building_age = as.integer(round((Sys.Date() - house$finish_ymd)/365, 0))
 dangerhouse = read.csv('d:/homework/riii/hw/house_danger.csv')
 house = merge(x = house, y = dangerhouse, by.x = 'Unnamed..0',by.y='ID', all.x = T)
 
-# 檢查遺失值
+# 檢查是否有遺失值
 # sum(is.na(house$danger))
 # 移除遺失值
 # house = house[complete.cases(house),]
@@ -70,18 +70,22 @@ testset = house[idx==2,]
 #   每平方米價格(price_per_sqmeter)5個變數作為解釋變數放入模型當中建模，並將模型存在house.rp變數中
 library('rpart')
 # ?rpart.control
-con = rpart.control(minsplit=20,cp=0.01)
+con = rpart.control(minsplit=20,cp=0.01, maxdepth=10)
 house.rp = rpart(danger~.,data=trainset,control = con)
 ```
 
 ```{r}
 # 10. 利用plot()和text()畫出house.rp模型的決策樹
 # ?plot.rpart
-plot(house.rp, uniform = T)
-text(house.rp)
+plot(house.rp, uniform = T, compress = T)
+text(house.rp, cex = 0.8)
 
-require(partykit)
-plot(as.party(house.rp))
+# 其他繪圖套件
+# library(partykit)
+# plot(as.party(house.rp))
+
+# library('rpart.plot')
+# rpart.plot(house.rp, cex=0.8)
 ```
 
 ```{r}
@@ -89,7 +93,7 @@ plot(as.party(house.rp))
 printcp(house.rp)
 plotcp(house.rp)
 
-# 根據繪圖，error穩定下降，並沒有過度調適，因此不須剪枝
+# 根據繪圖，最後一次分枝的xerror為最小值，沒有過度調適，因此不須剪枝
 ```
 
 ```{r}

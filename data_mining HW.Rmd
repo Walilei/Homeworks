@@ -79,11 +79,17 @@ house.rp = rpart(danger~.,data=trainset,control = con)
 # ?plot.rpart
 plot(house.rp, uniform = T)
 text(house.rp)
+
+require(partykit)
+plot(as.party(house.rp))
 ```
 
 ```{r}
 # 11. 請問此決策數是否需要進行剪枝(prune)？如需剪枝請將修剪後的模型存回house.rp中
-summary(house.rp)$cptable
+printcp(house.rp)
+plotcp(house.rp)
+
+# 根據繪圖，error穩定下降，並沒有過度調適，因此不須剪枝
 ```
 
 ```{r}
@@ -91,8 +97,13 @@ summary(house.rp)$cptable
 #     請問此模型的accuracy, precision, recall等績效分別為何?
 library('caret')
 library('e1071')
-predictions = predict(house.rp,testset,type='raw')
+predictions = predict(house.rp,testset,type='class')
+table(predictions,testset$danger)
+confusionMatrix(table(predictions, testset$danger))
 
+# Accuracy = 0.956
+# Precision = Specificity = 0.9747  (1426 / (37+1426) )
+# Recall = Neg Pred Value = 0.7887  (1426 / (382+1426) )
 ```
 
 ```{r}

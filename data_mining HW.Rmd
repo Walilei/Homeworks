@@ -58,8 +58,22 @@ house = house[complete.cases(house),]
 ```{r}
 # 8. 將house資料以8:2的比例分為訓練集和測試集，將訓練集資料存在trainset變數中，
 #   將測試集資料存在testset變數中
+
+# 選擇變數
+variable.list = names(house) %in% c('area','building_age','building_sqmeter','building_type','price_per_sqmeter','danger')
+house = house[,variable.list]
+
 idx <- sample(1:2, size=nrow(house), replace=T, prob=c(0.8, 0.2))
 trainset = house[idx==1,]
 testset = house[idx==2,]
+```
+
+```{r}
+# 9. 用rpart套件建立一預測房屋是否為危樓(danger)的決策樹模型
+#    請利用行政區(area), 屋齡(building_age), 房屋總平方米數(building_sqmeter),房屋類型(building_type)及
+#   每平方米價格(price_per_sqmeter)5個變數作為解釋變數放入模型當中建模，並將模型存在house.rp變數中
+library('rpart')
+con = rpart.control(minsplit=50,cp=0.01)
+house.rp = rpart(danger~.,data=trainset,control = con)
 ```
 

@@ -44,3 +44,10 @@ building_age = as.integer(round((Sys.Date() - house$finish_ymd)/365, 0))
 house = cbind(house, building_age)
 ```
 
+```{r}
+# 7. 讀取final資料夾下的house_danger檔案，並將house資料集和house_danger資料集
+#    以left outer join方式合併，存回house變數中
+dangerhouse = read.csv('./riii/hw/house_danger.csv')
+house = merge(x = house, y = dangerhouse, by = 'X', all.x = T)
+```
+

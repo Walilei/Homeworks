@@ -1,12 +1,11 @@
 ```{r}
 # 1. 讀取lvr_prices_big5.csv檔案
-price = read.csv('./riii/hw/lvr_prices_big5.csv')
+price = read.csv('d:/homework/riii/hw/lvr_prices_big5.csv')
 ```
 
 ```{r}
 # 2. 可使用哪個函式觀看檔案的資料結構
 str(price)
-price = price[, -23] # 刪除後面才要建立的price_per_sqmeter
 ```
 
 ```{r}
@@ -23,8 +22,7 @@ house = price[price$city_land_type=='住' & price$total_price>0 & price$building
 ```{r}
 # 4. 使用house資料，利用房屋價格(total_price)及房屋平方米數(building_sqmeter)兩欄位，
 #    產生一新欄位為每平方米價格(price_per_sqmeter)，並將其四捨五入到整數位
-price_per_sqmeter = round(house$total_price / house$building_sqmeter, 0)
-house = cbind(house, price_per_sqmeter)
+house$price_per_sqmeter = round(house$total_price / house$building_sqmeter, 0)
 ```
 
 ```{r}
@@ -40,18 +38,17 @@ house = house[abs(scale(house$price_per_sqmeter)) < 3,]
 # Hint(2) 一年請以365天計算，四捨五入至整數位
 # Hint(3) 將運算完的資料轉為整數型態(integer)
 house$finish_ymd = as.Date(house$finish_ymd)
-building_age = as.integer(round((Sys.Date() - house$finish_ymd)/365, 0))
-house = cbind(house, building_age)
+house$building_age = as.integer(round((Sys.Date() - house$finish_ymd)/365, 0))
 ```
 
 ```{r}
 # 7. 讀取final資料夾下的house_danger檔案，並將house資料集和house_danger資料集
 #    以left outer join方式合併，存回house變數中
-dangerhouse = read.csv('./riii/hw/house_danger.csv')
+dangerhouse = read.csv('d:/homework/riii/hw/house_danger.csv')
 house = merge(x = house, y = dangerhouse, by.x = 'Unnamed..0',by.y='ID', all.x = T)
 
 # 檢查遺失值
-# sum(is.na(house
+# sum(is.na(house$danger))
 # 移除遺失值
 # house = house[complete.cases(house),]
 ```
@@ -59,11 +56,9 @@ house = merge(x = house, y = dangerhouse, by.x = 'Unnamed..0',by.y='ID', all.x =
 ```{r}
 # 8. 將house資料以8:2的比例分為訓練集和測試集，將訓練集資料存在trainset變數中，
 #   將測試集資料存在testset變數中
-
 # 選擇變數
 variable.list = names(house) %in% c('area','building_age','building_sqmeter','building_type','price_per_sqmeter','danger')
 house = house[,variable.list]
-
 idx <- sample(1:2, size=nrow(house), replace=T, prob=c(0.8, 0.2))
 trainset = house[idx==1,]
 testset = house[idx==2,]
@@ -82,8 +77,7 @@ house.rp = rpart(danger~.,data=trainset,control = con)
 ```{r}
 # 10. 利用plot()和text()畫出house.rp模型的決策樹
 # ?plot.rpart
-par(mfrow=c(1,1))
-plot(house.rp)
+plot(house.rp, uniform = T)
 text(house.rp)
 ```
 

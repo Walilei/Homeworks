@@ -49,5 +49,15 @@ house = cbind(house, building_age)
 #    以left outer join方式合併，存回house變數中
 dangerhouse = read.csv('./riii/hw/house_danger.csv')
 house = merge(x = house, y = dangerhouse, by = 'X', all.x = T)
+
+# 檢查遺失值 sum(is.na(house$danger)) 有25474筆資料
+# 移除遺失值
+house = house[complete.cases(house),]
+```
+
+```{r}
+# 8. 將house資料以8:2的比例分為訓練集和測試集，將訓練集資料存在trainset變數中，
+#   將測試集資料存在testset變數中
+
 ```
 

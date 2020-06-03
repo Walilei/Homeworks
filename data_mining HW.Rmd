@@ -58,6 +58,8 @@ house = house[complete.cases(house),]
 ```{r}
 # 8. 將house資料以8:2的比例分為訓練集和測試集，將訓練集資料存在trainset變數中，
 #   將測試集資料存在testset變數中
-
+idx <- sample(1:2, size=nrow(house), replace=T, prob=c(0.8, 0.2))
+trainset = house[idx==1,]
+testset = house[idx==2,]
 ```
 

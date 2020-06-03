@@ -77,7 +77,7 @@ house.rp = rpart(danger~.,data=trainset,control = con)
 ```{r}
 # 10. 利用plot()和text()畫出house.rp模型的決策樹
 # ?plot.rpart
-plot(house.rp, uniform = T, compress = T)
+plot(house.rp, uniform=T, compress=T, margin=0.1)
 text(house.rp, cex = 0.8)
 
 # 其他繪圖套件

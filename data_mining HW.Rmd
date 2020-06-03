@@ -1,6 +1,6 @@
 ```{r}
 # 1. 讀取lvr_prices_big5.csv檔案
-price = read.csv('d:/homework/riii/hw/lvr_prices_big5.csv')
+price = read.csv('./riii/hw/lvr_prices_big5.csv')
 ```
 
 ```{r}
@@ -31,7 +31,7 @@ house = cbind(house, price_per_sqmeter)
 # 5. 使用house資料，利用scale() 將每平方米價格(price_per_sqmeter)欄位資料標準化
 #    ，並剔除掉outlier資料(z-score > 3)
 # scale(house$price_per_sqmeter)
-house = house[abs(scale(house$price_per_sqmeter)) <= 3,]
+house = house[abs(scale(house$price_per_sqmeter)) < 3,]
 ```
 
 ```{r}
@@ -48,9 +48,10 @@ house = cbind(house, building_age)
 # 7. 讀取final資料夾下的house_danger檔案，並將house資料集和house_danger資料集
 #    以left outer join方式合併，存回house變數中
 dangerhouse = read.csv('./riii/hw/house_danger.csv')
-house = merge(x = house, y = dangerhouse, by = 'X', all.x = T)
+house = merge(x = house, y = dangerhouse, by.x = 'Unnamed..0',by.y='ID', all.x = T)
 
-# 檢查遺失值 sum(is.na(house$danger)) 有25474筆資料
+# 檢查遺失值
+sum(is.na(house
 # 移除遺失值
 house = house[complete.cases(house),]
 ```
@@ -74,7 +75,7 @@ testset = house[idx==2,]
 #   每平方米價格(price_per_sqmeter)5個變數作為解釋變數放入模型當中建模，並將模型存在house.rp變數中
 library('rpart')
 # ?rpart.control
-con = rpart.control(minsplit=50,cp=0.0001)
+con = rpart.control(minsplit=20,cp=0.01)
 house.rp = rpart(danger~.,data=trainset,control = con)
 ```
 
@@ -84,4 +85,6 @@ house.rp = rpart(danger~.,data=trainset,control = con)
 par(mfrow=c(1,1))
 plot(house.rp)
 text(house.rp)
+
+summary(house.rp)$cptable
 ```

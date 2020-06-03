@@ -73,7 +73,15 @@ testset = house[idx==2,]
 #    請利用行政區(area), 屋齡(building_age), 房屋總平方米數(building_sqmeter),房屋類型(building_type)及
 #   每平方米價格(price_per_sqmeter)5個變數作為解釋變數放入模型當中建模，並將模型存在house.rp變數中
 library('rpart')
-con = rpart.control(minsplit=50,cp=0.01)
+# ?rpart.control
+con = rpart.control(minsplit=50,cp=0.0001)
 house.rp = rpart(danger~.,data=trainset,control = con)
 ```
 
+```{r}
+# 10. 利用plot()和text()畫出house.rp模型的決策樹
+# ?plot.rpart
+par(mfrow=c(1,1))
+plot(house.rp)
+text(house.rp)
+```

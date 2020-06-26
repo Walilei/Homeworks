@@ -15,7 +15,7 @@ login_button.click()
 email = driver.find_element_by_id("nextgen-authenticate.all.log_in_email")
 email.send_keys('b90607029@gmail.com')
 pwd = driver.find_element_by_id("nextgen-authenticate.all.log_in_password")
-pwd.send_keys('medical0411')
+pwd.send_keys('')
 
 # 第二次log in按鈕無法正確取得元素，改用Xpath搜尋
 login_button = driver.find_element_by_xpath("//button[@type='submit']")

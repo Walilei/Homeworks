@@ -37,8 +37,7 @@ with open('products.csv', newline='', encoding="utf-8") as csvfile:
     products = csv.reader(csvfile)
     for row in products:
         product_id = row[0]
-        product_name = row[1]
-        input.send_keys(product_name)
-        submit_button = driver.find_element_by_xpath("//button[@type='submit']")
-        submit_button.click()
+        product_name = row[1].strip('"')
+        product_page = f"https://www.instacart.com/store/sprouts/search_v3/{product_name}"
+        driver.get(product_page)
 

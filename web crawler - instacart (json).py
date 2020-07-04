@@ -11,6 +11,8 @@ spec_list = ["Contains", "Form", "State of Readiness", "Store", "Package Quantit
              "Net weight"]  # 要取得的specifications項目
 
 with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
+    count = 0
+    index = 1
     products = csv.reader(csvfile)
     for product in products:
         product_query = product[0] + ', ' + product[1]
@@ -68,8 +70,14 @@ with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
             req = requests.get(product_info['url'])
             soup = BeautifulSoup(req.text, 'lxml')
             category = soup.select('span[itemprop]')
-            product_info['category'] = [x.text for x in category]
+            product_info['category'] = [x.text for x in category]  # 商品類別
 
-            with open('product_info.json', 'a') as outfile:
-                json.dump(product_info, outfile)
+            with open('product_info_LA2.json', 'a') as output:
+                output.write(f"{index}" + ':')
+                index += 1
+                json.dump(product_info, output, indent=4)
+                output.write(',')
+                count += 1
+                print(f'{count} finished.')
+
                 

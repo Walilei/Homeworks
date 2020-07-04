@@ -39,7 +39,10 @@ with open('products.csv', newline='', encoding='utf-8') as csvfile:
             if 'images' in product.keys():
                 product_info['image_url'] = product["images"][0]["base_url"] + product["images"][0]["primary"]  # 商品圖片網址
             if 'price' in product.keys():
-                product_info['price'] = product["price"]["current_retail"]  # 商品價格
+                try:
+                    product_info['price'] = product["price"]["current_retail"]  # 商品價格
+                except KeyError:
+                    product_info['price'] = product["price"]["current_retail_min"]  # 最低價格
             if 'average_rating' in product.keys():
                 product_info['average_rating'] = product["average_rating"]  # 評分分數
             if 'total_reviews' in product.keys():

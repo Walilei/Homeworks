@@ -4,33 +4,34 @@ import re
 import csv
 from bs4 import BeautifulSoup
 
-user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) ' \
-             'Chrome/83.0.4103.116 Safari/537.36'
+user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
 product_info = {}
-spec_list = ["Contains", "Form", "State of Readiness", "Store", "Package Quantity", "Package type",
-             "Net weight"]  # 要取得的specifications項目
+spec_list = ["Contains", "Form", "State of Readiness", "Store", "Package Quantity", "Package type", "Net weight"]  # 要取得的specifications項目
 
 with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
     count = 0
     index = 1
     products = csv.reader(csvfile)
-    for product in products:
-        product_query = product[0] + ', ' + product[1]
+    for item in products:
+        product_query = item[0] + ', ' + item[1]
         json_url = 'https://redsky.target.com/v2/plp/search/?' \
                    'channel=web&count=6&default_purchasability_filter=true' \
                    '&facet_recovery=false&fulfillment_test_mode=grocery_opu_team_member_test' \
-                   f'&isDLP=false&keyword={product_query}&offset=0&pageId=%2Fs%2F{product_query}&pricing_store_id=3321' \
-                   '&store_ids=3321%2C3277%2C3249%2C3312%2C3284&visitorId=01730534EA6202019A76E876D860158E' \
+                   f'&isDLP=false&keyword={product_query}&offset=0&pageId=%2Fs%2F{product_query}&pricing_store_id=2776' \
+                   '&store_ids=2776%2C3277%2C3249%2C3312%2C3284&visitorId=01730534EA6202019A76E876D860158E' \
                    '&include_sponsored_search_v2=false&ppatok=AOxT33a&platform=desktop' \
                    f'&useragent={user_agent}' \
                    '&excludes=available_to_promise_qualitative%2Cavailable_to_promise_location_qualitative' \
                    '&key=eb2551e4accc14f38cc42d32fbc2b2ea'
         req = requests.get(json_url)
         json_string = json.loads(req.text)  # python的字典格式
-        p_nums = len(json_string['search_response']['items']['Item'])
+        try:
+            p_nums = len(json_string['search_response']['items']['Item'])
+        except:
+            continue
 
         for i in range(p_nums):
-            product_info['query'] = product[0]
+            product_info['query'] = item[0]
             product = json_string['search_response']['items']['Item'][i]
             if 'title' in product.keys():  # 商品名稱
                 product_info['name'] = product['title']
@@ -73,11 +74,9 @@ with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
             product_info['category'] = [x.text for x in category]  # 商品類別
 
             with open('product_info_LA2.json', 'a') as output:
-                output.write(f"{index}" + ':')
+                output.write('"' + f"{index}" + '"' + ':')
                 index += 1
                 json.dump(product_info, output, indent=4)
                 output.write(',')
                 count += 1
                 print(f'{count} finished.')
-
-                

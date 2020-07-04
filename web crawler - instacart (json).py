@@ -23,13 +23,13 @@ with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
                    f'&useragent={user_agent}' \
                    '&excludes=available_to_promise_qualitative%2Cavailable_to_promise_location_qualitative' \
                    '&key=eb2551e4accc14f38cc42d32fbc2b2ea'
-        req = requests.get(json_url)
-        json_string = json.loads(req.text)  # python的字典格式
         try:
-            p_nums = len(json_string['search_response']['items']['Item'])
+            req = requests.get(json_url)        # 搜尋不到物品時會報錯
+            json_string = json.loads(req.text)  # python的字典格式
         except:
-            continue
+            print(f'No result for {item[0]}.')
 
+        p_nums = len(json_string['search_response']['items']['Item'])
         for i in range(p_nums):
             product_info['query'] = item[0]
             product = json_string['search_response']['items']['Item'][i]
@@ -68,10 +68,11 @@ with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
             if 'description' in product.keys():  # 商品描述
                 product_info['description'] = product['description']
 
-            req = requests.get(product_info['url'])
-            soup = BeautifulSoup(req.text, 'lxml')
-            category = soup.select('span[itemprop]')
-            product_info['category'] = [x.text for x in category]  # 商品類別
+            if len(product['url']) > 1:
+                req = requests.get(product_info['url'])
+                soup = BeautifulSoup(req.text, 'lxml')
+                category = soup.select('span[itemprop]')
+                product_info['category'] = [x.text for x in category]  # 商品類別
 
             with open('product_info_LA2.json', 'a') as output:
                 output.write('"' + f"{index}" + '"' + ':')
@@ -79,4 +80,5 @@ with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
                 json.dump(product_info, output, indent=4)
                 output.write(',')
                 count += 1
-                print(f'{count} finished.')
+                print(f'{count} finished.', product_info['name'])
+

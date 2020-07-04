@@ -30,7 +30,7 @@ with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
         p_nums = len(json_string['search_response']['items']['Item'])
 
         for i in range(p_nums):
-            product_info['query'] = product_query
+            product_info['query'] = product[0]
             product = json_string['search_response']['items']['Item'][i]
             if 'title' in product.keys():  # 商品名稱
                 product_info['name'] = product['title']

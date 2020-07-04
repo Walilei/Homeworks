@@ -30,7 +30,7 @@ with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
         for i in range(p_nums):
             product_info['query'] = product_query
             product = json_string['search_response']['items']['Item'][i]
-            if 'title' in product.keys():                                        # 商品名稱
+            if 'title' in product.keys():  # 商品名稱
                 product_info['name'] = product['title']
             if 'url' in product.keys():
                 product_info['url'] = "https://www.target.com" + product['url']  # 商品網址
@@ -53,21 +53,23 @@ with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
                     product_info['highlights'] = product['soft_bullets']['bullets']  # 商品特色
             if 'bullet_description' in product.keys():
                 product_info['Specifications'] = {}
-                for tag in spec_list:                             # 拿specifications跟spec_list比對後加入
+                for tag in spec_list:  # 拿specifications跟spec_list比對後加入
                     for j in product["bullet_description"]:
                         j = j.replace("<B>", "").replace("</B>", "")
                         if re.match(tag, j):
-                            product_info['Specifications'][tag] = j.split(": ")[1]    # 商品規格
+                            product_info['Specifications'][tag] = j.split(": ")[1]  # 商品規格
             if 'top_reviews' in product.keys():
                 product_info['top_reviews'] = []
                 for _ in product['top_reviews']:
-                    product_info['top_reviews'].append(_['review_text'])    # 最佳評論
-            if 'description' in product.keys():    # 商品描述
+                    product_info['top_reviews'].append(_['review_text'])  # 最佳評論
+            if 'description' in product.keys():  # 商品描述
                 product_info['description'] = product['description']
-                
+
             req = requests.get(product_info['url'])
             soup = BeautifulSoup(req.text, 'lxml')
             category = soup.select('span[itemprop]')
             product_info['category'] = [x.text for x in category]
 
-            print(product_info)
+            with open('product_info.json', 'a') as outfile:
+                json.dump(product_info, outfile)
+                

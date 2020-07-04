@@ -2,7 +2,6 @@ import requests
 import json
 import re
 import csv
-from bs4 import BeautifulSoup
 
 user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) ' \
              'Chrome/83.0.4103.116 Safari/537.36'
@@ -10,10 +9,10 @@ product_info = {}
 spec_list = ["Contains", "Form", "State of Readiness", "Store", "Package Quantity", "Package type",
              "Net weight"]  # 要取得的specifications項目
 
-with open('products.csv', newline='', encoding='utf-8') as csvfile:
+with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
     products = csv.reader(csvfile)
     for product in products:
-        product_query = product[1]
+        product_query = product[0] + ', ' + product[1]
         json_url = 'https://redsky.target.com/v2/plp/search/?' \
                    'channel=web&count=6&default_purchasability_filter=true' \
                    '&facet_recovery=false&fulfillment_test_mode=grocery_opu_team_member_test' \
@@ -61,5 +60,9 @@ with open('products.csv', newline='', encoding='utf-8') as csvfile:
                         j = j.replace("<B>", "").replace("</B>", "")
                         if re.match(tag, j):
                             product_info['Specifications'][tag] = j.split(": ")[1]    # 商品規格
+            if 'top_reviews' in product.keys():
+                product_info['top_reviews'] = []
+                for _ in product['top_reviews']:
+                    product_info['top_reviews'].append(_['review_text'])    # 最佳評論
 
             print(product_info)

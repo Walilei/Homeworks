@@ -2,6 +2,7 @@ import requests
 import json
 import re
 import csv
+from bs4 import BeautifulSoup
 
 user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) ' \
              'Chrome/83.0.4103.116 Safari/537.36'
@@ -63,5 +64,10 @@ with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
                     product_info['top_reviews'].append(_['review_text'])    # 最佳評論
             if 'description' in product.keys():    # 商品描述
                 product_info['description'] = product['description']
+                
+            req = requests.get(product_info['url'])
+            soup = BeautifulSoup(req.text, 'lxml')
+            category = soup.select('span[itemprop]')
+            product_info['category'] = [x.text for x in category]
 
             print(product_info)

@@ -61,5 +61,7 @@ with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
                 product_info['top_reviews'] = []
                 for _ in product['top_reviews']:
                     product_info['top_reviews'].append(_['review_text'])    # 最佳評論
+            if 'description' in product.keys():    # 商品描述
+                product_info['description'] = product['description']
 
             print(product_info)

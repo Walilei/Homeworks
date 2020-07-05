@@ -11,14 +11,14 @@ product_info = {}
 # 要取得的specifications項目
 spec_list = ["Contains", "Form", "State of Readiness", "Store", "Package Quantity", "Package type", "Net weight"]
 
-
+# 增加errors參數忽略非法字元出現
 with open('keywords.csv', newline='', encoding='utf-8', errors='ignore') as csv_file:
     count = 0
     index = 1
     products = csv.reader(csv_file)
     for item in products:
         product_query = item[0] + ', ' + item[1]
-        product_query = quote(product_query)
+        product_query = quote(product_query)    # 利用模組將字串轉為網址形式再代入避免錯誤網址
         json_url = "https://redsky.target.com/v2/plp/search/?" \
                    "channel=web&count=6&default_purchasability_filter=true" \
                    "&facet_recovery=false&fulfillment_test_mode=grocery_opu_team_member_test" \
@@ -29,10 +29,10 @@ with open('keywords.csv', newline='', encoding='utf-8', errors='ignore') as csv_
                    f"&useragent={user_agent}" \
                    "&excludes=available_to_promise_qualitative%2Cavailable_to_promise_location_qualitative" \
                    "&key=eb2551e4accc14f38cc42d32fbc2b2ea"
-        req = requests.get(json_url)        
+        req = requests.get(json_url)
         json_string = json.loads(req.text)  # python的字典格式
-        
-        try:  # 搜尋不到物品時會報錯
+
+        try:  # 搜尋不到物品時會報錯KeyError
             p_nums = len(json_string['search_response']['items']['Item'])
         except KeyError:
             print(f'No result for {item[0]}.')
@@ -85,7 +85,7 @@ with open('keywords.csv', newline='', encoding='utf-8', errors='ignore') as csv_
             with open('product_info_LA2.json', 'a', errors='ignore') as output:
                 output.write('"' + f"{index}" + '"' + ':')
                 index += 1
-                json.dump(product_info, output, indent=4, ensure_ascii=False)
+                json.dump(product_info, output, indent=4)
                 output.write(',')
                 count += 1
                 print(f'{count} finished.', item[0])

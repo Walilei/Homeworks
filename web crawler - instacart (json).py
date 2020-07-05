@@ -29,9 +29,10 @@ with open('keywords.csv', newline='', encoding='utf-8', errors='ignore') as csv_
                    f"&useragent={user_agent}" \
                    "&excludes=available_to_promise_qualitative%2Cavailable_to_promise_location_qualitative" \
                    "&key=eb2551e4accc14f38cc42d32fbc2b2ea"
-        try:
-            req = requests.get(json_url)        # 搜尋不到物品時會報錯
-            json_string = json.loads(req.text)  # python的字典格式
+        req = requests.get(json_url)        
+        json_string = json.loads(req.text)  # python的字典格式
+        
+        try:  # 搜尋不到物品時會報錯
             p_nums = len(json_string['search_response']['items']['Item'])
         except KeyError:
             print(f'No result for {item[0]}.')

@@ -85,7 +85,7 @@ with open('keywords.csv', newline='', encoding='utf-8', errors='ignore') as csv_
             with open('product_info_LA2.json', 'a', errors='ignore') as output:
                 output.write('"' + f"{index}" + '"' + ':')
                 index += 1
-                json.dump(product_info, output, indent=4)
+                json.dump(product_info, output, indent=4, ensure_ascii=False)
                 output.write(',')
                 count += 1
                 print(f'{count} finished.', item[0])

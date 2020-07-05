@@ -3,17 +3,19 @@ import json
 import re
 import csv
 from bs4 import BeautifulSoup
+from urllib.parse import quote
 
 user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
 product_info = {}
 spec_list = ["Contains", "Form", "State of Readiness", "Store", "Package Quantity", "Package type", "Net weight"]  # 要取得的specifications項目
 
-with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
+with open('keywords.csv', newline='', encoding='utf-8', errors='ignore') as csvfile:
     count = 0
     index = 1
     products = csv.reader(csvfile)
     for item in products:
         product_query = item[0] + ', ' + item[1]
+        product_query = quote(product_query)
         json_url = 'https://redsky.target.com/v2/plp/search/?' \
                    'channel=web&count=6&default_purchasability_filter=true' \
                    '&facet_recovery=false&fulfillment_test_mode=grocery_opu_team_member_test' \
@@ -80,5 +82,4 @@ with open('keywords.csv', newline='', encoding='utf-8') as csvfile:
                 json.dump(product_info, output, indent=4)
                 output.write(',')
                 count += 1
-                print(f'{count} finished.', product_info['name'])
-
+                print(f'{count} finished.', item[0])
